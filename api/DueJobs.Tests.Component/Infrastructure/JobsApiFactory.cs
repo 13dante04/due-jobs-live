@@ -18,6 +18,8 @@ public sealed class JobsApiFactory : WebApplicationFactory<Program>
         builder.UseSetting("SeedExampleJobs", "false");
         builder.ConfigureTestServices(services =>
         {
+            services.RemoveAll<IJobRepository>();
+            services.AddSingleton<IJobRepository, InMemoryJobRepository>();
             services.RemoveAll<IClock>();
             services.AddSingleton<IClock>(Clock);
             services.RemoveAll<IDeliveryGateway>();

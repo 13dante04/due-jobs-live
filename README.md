@@ -32,7 +32,7 @@ From `api`:
 dotnet run --project DueJobs.Api
 ```
 
-The API runs at `http://localhost:5080`. `GET /jobs` starts with three example jobs. `POST /jobs`, `POST /jobs/{id}/cancel`, and `POST /jobs/process-due` already exist. Delivery calls go to an in-memory recording gateway, not the network. Data resets on restart. This service has known behavior gaps; the exercise tickets describe what the team needs fixed or added.
+The API runs at `http://localhost:5080`. `GET /jobs` starts with three example jobs. `POST /jobs`, `POST /jobs/{id}/cancel`, and `POST /jobs/process-due` already exist. Delivery calls go to an in-memory recording gateway, not the network. Jobs persist across restarts in the local `due-jobs.db` SQLite file. This service has known behavior gaps; the exercise tickets describe what the team needs fixed or added.
 
 From `web` (optional):
 
@@ -83,7 +83,7 @@ delivery failures, and job-state transitions.
 - `web`: Angular dashboard with a routed app shell, jobs feature, typed mock data service,
   and reusable UI components; see [frontend documentation](web/README.md)
 
-There is no database, authentication, Docker requirement, or hidden setup. The starter is intentionally modest: work on the requested tickets rather than rewriting the service.
+SQLite creates its local file automatically; there is no database server, authentication, or Docker requirement. The starter is intentionally modest: work on the requested tickets rather than rewriting the service.
 
 ## Demo branches
 
@@ -92,3 +92,18 @@ There is no database, authentication, Docker requirement, or hidden setup. The s
 - `demo/database`: branches from `demo/controllers`; replaces in-memory storage with SQLite through the existing repository interface (dependency inversion).
 
 Compare either sibling against `demo/controllers` to isolate its changes.
+
+### Database demo
+
+`SqliteJobRepository` replaces `InMemoryJobRepository` in DI. Controllers and
+`JobService` are unchanged. SQL uses parameters and stores the job as JSON beside
+its primary key to keep the persistence example small. Seed jobs are added only
+when absent, preserving their state on restart.
+
+Override the default path with `ConnectionStrings__Jobs='Data Source=/tmp/demo.db'`.
+HTTP component tests still substitute isolated in-memory repositories; a separate
+SQLite test verifies persistence after reopening and updating the database.
+Compare `git diff demo/controllers..demo/database`.
+
+This is a synchronous teaching example, without migrations or coordination between
+concurrent processors. Processing behavior retains the starter's known gaps.
