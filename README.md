@@ -77,10 +77,18 @@ delivery failures, and job-state transitions.
 
 ## Layout
 
-- `api/DueJobs.Api`: minimal API, model, clock, and in-memory repository
+- `api/DueJobs.Api`: controller API, model, clock, and in-memory repository
 - `api/DueJobs.Tests.Unit`: xUnit service behavior tests
 - `api/DueJobs.Tests.Component`: xUnit HTTP tests using `WebApplicationFactory`
 - `web`: Angular dashboard with a routed app shell, jobs feature, typed mock data service,
   and reusable UI components; see [frontend documentation](web/README.md)
 
 There is no database, authentication, Docker requirement, or hidden setup. The starter is intentionally modest: work on the requested tickets rather than rewriting the service.
+
+## Demo branches
+
+- `demo/controllers`: controller-based API with the existing routes and JSON contracts.
+- `demo/fluent-validation`: branches from `demo/controllers`; moves creation validation into an injected FluentValidation validator (single responsibility and dependency inversion).
+- `demo/database`: branches from `demo/controllers`; replaces in-memory storage with SQLite through the existing repository interface (dependency inversion).
+
+Compare either sibling against `demo/controllers` to isolate its changes.
