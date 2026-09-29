@@ -1,0 +1,4 @@
+.badge { display: inline-block; padding: .25rem .6rem; border-radius: 1rem; font-size: .8rem; font-weight: 600; background: #eef2f6; color: #344054; }
+[data-status=Pending] { background: #fff4d6; color: #854a0e; }
+[data-status=Completed] { background: #dcfae6; color: #067647; }
+[data-status=Failed] { background: #fee4e2; color: #b42318; }

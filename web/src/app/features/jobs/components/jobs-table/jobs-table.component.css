@@ -1,0 +1,8 @@
+.table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: .75rem; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: 1rem; border-bottom: 1px solid var(--border); }
+thead { background: #f8fafc; font-size: .875rem; color: var(--muted); }
+tbody th { font-weight: 600; min-width: 160px; }
+tbody tr:last-child > * { border-bottom: 0; }
+.target, .last-error { display: block; margin-top: .3rem; font-size: .8rem; font-weight: 400; overflow-wrap: anywhere; }
+.last-error { color: #b42318; }

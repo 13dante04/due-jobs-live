@@ -1,0 +1,17 @@
+<div class="table-container" tabindex="0" role="region" aria-label="Scheduled jobs table">
+  <table>
+    <caption class="visually-hidden">Jobs and their delivery status. Dates are shown in your local time.</caption>
+    <thead><tr><th scope="col">Job</th><th scope="col">Status</th><th scope="col">Scheduled for</th><th scope="col">Delivery</th><th scope="col">Attempts</th></tr></thead>
+    <tbody>
+      @for (job of jobs(); track job.id) {
+        <tr>
+          <th scope="row">{{ job.title }} @if (job.lastError) { <span class="last-error">{{ job.lastError }}</span> }</th>
+          <td><app-job-status [status]="job.status" /></td>
+          <td>{{ job.scheduledAt | date:'medium' }}</td>
+          <td>{{ job.kind }}<span class="target muted">{{ job.target }}</span></td>
+          <td>{{ job.attempts }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

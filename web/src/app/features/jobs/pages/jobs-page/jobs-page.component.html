@@ -1,0 +1,21 @@
+<header class="page-header">
+  <div><h1>Jobs</h1><p class="muted">Scheduled work and delivery status.</p></div>
+  <button type="button" (click)="refresh()" [disabled]="loading()">{{ loading() ? 'Loading…' : 'Refresh' }}</button>
+</header>
+<section aria-label="Jobs list" [attr.aria-busy]="loading()">
+  @if (error()) {
+    <div class="error" role="alert">
+      <p>{{ error() }}</p>
+      <button type="button" (click)="refresh()">Try again</button>
+    </div>
+  }
+  @if (loading()) {
+    <p role="status">Loading jobs…</p>
+  }
+  @if (jobs().length) {
+    @if (error()) { <p class="muted">Showing the last successfully loaded jobs.</p> }
+    <app-jobs-table [jobs]="jobs()" />
+  } @else if (!loading() && !error()) {
+    <app-empty-state title="No jobs yet" description="Scheduled jobs will appear here." />
+  }
+</section>
