@@ -7,7 +7,7 @@ public sealed class JobServiceTests
     private readonly FixedClock _clock = new();
     private readonly InMemoryJobRepository _repository = new();
     private readonly RecordingDeliveryGateway _delivery = new();
-    private JobService CreateService() => new(_repository, _clock, _delivery);
+    private JobService CreateService() => new(_repository, _clock, _delivery, new CreateJobValidator(_clock));
 
     [Fact]
     public void Create_TrimsTitleAndStoresPendingJob()

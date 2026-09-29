@@ -1,12 +1,14 @@
+using FluentValidation;
+
 namespace DueJobs.Api;
 
 // This service predates the interview tasks. Keep its existing routes usable while improving it.
-public sealed class JobService(IJobRepository jobs, IClock clock, IDeliveryGateway delivery)
+public sealed class JobService(IJobRepository jobs, IClock clock, IDeliveryGateway delivery, IValidator<CreateJobRequest> validator)
 {
     public Job Create(string title, DateTimeOffset scheduledAt, JobKind kind = JobKind.Email, string target = "operator@example.test")
     {
-        if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Title is required.");
-        if (scheduledAt <= clock.UtcNow) throw new ArgumentException("Scheduled time must be in the future.");
+        var validation = validator.Validate(new CreateJobRequest(title, scheduledAt, kind, target));
+        if (!validation.IsValid) throw new ArgumentException(validation.Errors[0].ErrorMessage);
         var job = new Job(Guid.NewGuid(), title.Trim(), scheduledAt, JobStatus.Pending, Kind: kind, Target: target);
         jobs.Add(job);
         return job;

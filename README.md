@@ -92,3 +92,13 @@ There is no database, authentication, Docker requirement, or hidden setup. The s
 - `demo/database`: branches from `demo/controllers`; replaces in-memory storage with SQLite through the existing repository interface (dependency inversion).
 
 Compare either sibling against `demo/controllers` to isolate its changes.
+
+### FluentValidation demo
+
+`CreateJobValidator` owns creation rules; `JobService` depends on
+`IValidator<CreateJobRequest>`. Validation runs before saving, including for callers
+outside HTTP. The clock is evaluated for each validation, not when DI constructs
+the validator. The controller keeps the existing 400 `{ "error": "..." }` response.
+Compare `git diff demo/controllers..demo/fluent-validation`.
+
+Uses [FluentValidation's injected validator pattern](https://docs.fluentvalidation.net/en/latest/di.html).

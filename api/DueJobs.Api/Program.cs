@@ -1,3 +1,4 @@
+using FluentValidation;
 using DueJobs.Api;
 using System.Text.Json.Serialization;
 
@@ -7,6 +8,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddSingleton<IClock, SystemClock>();
 builder.Services.AddSingleton<IJobRepository, InMemoryJobRepository>();
 builder.Services.AddSingleton<IDeliveryGateway, RecordingDeliveryGateway>();
+builder.Services.AddSingleton<IValidator<CreateJobRequest>, CreateJobValidator>();
 builder.Services.AddSingleton<JobService>();
 
 var app = builder.Build();
